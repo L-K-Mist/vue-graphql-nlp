@@ -6,12 +6,14 @@
       :key="link.id"
       :link="link">
     </link-item>
+    <suppliers-table></suppliers-table>
   </div>
 </template>
 
 <script>
 import { ALL_LINKS_QUERY } from "../constants/graphql";
 import LinkItem from "./LinkItem";
+import SuppliersTable from "@/components/Suppliers/SuppliersTable"
 
 export default {
   name: "LinkList",
@@ -23,7 +25,8 @@ export default {
     };
   },
   components: {
-    LinkItem
+    LinkItem,
+    SuppliersTable
   },
   // 4
   apollo: {

@@ -38,6 +38,7 @@
 </template>
 
 <script>
+
 import CreateLink from "@/components/CreateLink";
 export default {
   data() {
@@ -56,7 +57,8 @@ export default {
   name: "app",
   components: {
     // LinkList,
-    CreateLink
+    CreateLink,
+
   }
 };
 </script>

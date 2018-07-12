@@ -1,31 +1,47 @@
 <template v-if="suppliers !== null">
-
-  <v-data-table
-    :headers="headers"
-    :items="suppliers"
-    hide-actions
-    class="elevation-1"
-  >
-    <template slot="items" slot-scope="props">
-      <td>{{ props.item.name }}</td>
-      <td class="text-xs-left">{{ props.item.email }}</td>
-      <td class="text-xs-left">{{ props.item.nickName }}</td>
-    </template>
-  </v-data-table>
+<v-card>
+  <v-card-title>
+    <h4>
+      What I want to do with graphql, vue(tify), and nlp-compromise is create an app that turns my daily activity logs into spreadsheets.
+    </h4>
+  </v-card-title>
+  <v-card-text>
+    <v-data-table
+      :headers="headers"
+      :items="allSuppliers"
+      hide-actions
+      class="elevation-1"
+    >
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.name }}</td>
+        <td class="text-xs-left">{{ props.item.email }}</td>
+        <td class="text-xs-left">{{ props.item.nickname }}</td>
+      </template>
+    </v-data-table>
+  </v-card-text>
+</v-card>
 </template>
 
 <script>
+import { ALL_SUPPLIERS_QUERY } from "@/constants/graphql"
+
 export default {
   mounted() {
     this.$store.dispatch("fetchAllSuppliers");
   },
-  computed: {
-    suppliers() {
-      return this.$store.getters.suppliers;
+  // computed: {
+  //   suppliers() {
+  //     return this.$store.getters.suppliers;
+  //   }
+  // },
+  apollo: {
+    allSuppliers: {
+      query: ALL_SUPPLIERS_QUERY
     }
   },
   data() {
     return {
+      allSuppliers: [],
       headers: [
         {
           text: "Company Name",
