@@ -1,4 +1,4 @@
-import crud from '@/api/pouchDB'
+// import crud from '@/api/pouchDB'
 
 const state = {
     testRemoteDispatch: false,
@@ -27,15 +27,15 @@ const actions = {
   },
   captureNewSupplier: ({ dispatch }, payload) => {
     payload._id = "supplier_" + payload.name
-    crud.create(payload)
-    crud.info()
+    // crud.create(payload)
+    // crud.info()
     dispatch('fetchAllSuppliers')
   },
   updateExistingSupplier: ({ commit }, payload) => {
-      crud.update(payload)
+    //   crud.update(payload)
   },
   fetchAllSuppliers: ({ commit }) => {
-      console.log(crud.getAllType('supplier_'))
+    //   console.log(crud.getAllType('supplier_'))
   }
 };
 
