@@ -13,6 +13,7 @@ import VueApollo from 'vue-apollo'
 
 import App from './App'
 import router from './router'
+import store from "./store/store";
 import {
   Emoji
 } from "emoji-mart-vue";
@@ -53,15 +54,11 @@ const apolloProvider = new VueApollo({
   }
 })
 
-
-
-
-
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   provide: apolloProvider.provide(), // specify the provide object on your root component
   router,
+  store,
   render: h => h(App)
 })

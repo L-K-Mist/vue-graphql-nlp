@@ -1,5 +1,5 @@
 # project: cjjg0n07x5q1n0139fkwu9lrp
-# version: 2
+# version: 3
 
 type Link @model {
   id: ID! @isUnique
@@ -24,4 +24,13 @@ type User @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
+}
+
+type Supplier @model {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  name: String! @isUnique
+  nickname: String! @isUnique
+  email: String! @isUnique
 }
