@@ -12,7 +12,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 
 import App from './App'
-// import router from './router'
+import router from './router'
 import {
   Emoji
 } from "emoji-mart-vue";
@@ -43,6 +43,9 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo)
 
 // 6
+/**
+ * create a new apollo client instance through VueApollo and set the defaultClient to the apolloClient we just created.You also set $loadingKey to‘ loading’ so that we can easily display a loading indicator in the UI.
+ */
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
@@ -58,7 +61,7 @@ const apolloProvider = new VueApollo({
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  provide: apolloProvider.provide(),
-  // router,
+  provide: apolloProvider.provide(), // specify the provide object on your root component
+  router,
   render: h => h(App)
 })

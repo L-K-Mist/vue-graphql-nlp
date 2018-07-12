@@ -1,5 +1,9 @@
 <template>
-    <v-card>{{link.description}} ({{link.url}})</v-card>
+    <v-card>
+      <v-card-text>
+        {{link.description}} ({{link.url}})
+      </v-card-text>
+    </v-card>
 </template>
 
 
