@@ -9,8 +9,7 @@
         <v-card-text>
             <v-form>
                 <v-container>
-                    <v-layout row wrap>
-                
+                    <v-layout row wrap>                
                     <v-flex xs12 sm10 md8>
                         <v-text-field
                         label="Description"

@@ -8,7 +8,7 @@
       required
     ></v-text-field>
     <v-text-field
-      v-model="nickName"
+      v-model="nickname"
       :rules="nameRules"
       :counter="10"
       label="Nick-Name"
@@ -29,7 +29,9 @@
 </template>
 
 <script>
+import { CREATE_SUPPLIER_MUTATION } from "@/constants/graphql"
 export default {
+  name: "CreateSupplier",
   data: () => ({
     valid: false,
     name: "",
@@ -37,7 +39,7 @@ export default {
       v => !!v || "Name is required",
       v => v.length <= 40 || "Name must be less than 40 characters"
     ],
-    nickName: "",
+    nickname: "",
     email: "",
     emailRules: [
       v => !!v || "E-mail is required",
@@ -47,15 +49,23 @@ export default {
     ]
   }),
   methods: {
+
     submit() {
       if (this.$refs.form.validate()) {
-        // Native form submission is not yet supported
-        this.$store.dispatch("captureNewSupplier", {
-          name: this.name,
-          email: this.email,
-          nickName: this.nickName
-        });
-        //this.$store.dispatch('triggerTest', true)
+        this.$apollo.mutate({
+          mutation: CREATE_SUPPLIER_MUTATION,
+          variables: {
+            name,
+            nickName,
+            email
+          }
+        })
+        // this.$store.dispatch("captureNewSupplier", {
+        //   name: this.name,
+        //   email: this.email,
+        //   nickname: this.nickName
+        // });
+        // //this.$store.dispatch('triggerTest', true)
       }
     }
   }
