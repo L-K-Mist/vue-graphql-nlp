@@ -51,7 +51,7 @@ export default {
           value: "name"
         },
         { text: "Email", value: "email" },
-        { text: "Nick-Name (g)", value: "nickName" }
+        { text: "Nick-Name (g)", value: "nickname" }
       ],
       desserts: [
         {

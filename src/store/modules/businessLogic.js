@@ -1,6 +1,7 @@
 // import crud from '@/api/pouchDB'
 import  apolloClient from "@/apolloClient"
 import { ALL_SUPPLIERS_QUERY } from "@/constants/graphql"
+import { CREATE_SUPPLIER_MUTATION } from "@/constants/graphql"
 import { forEach } from "async";
 
 
@@ -41,6 +42,15 @@ const actions = {
         })
         console.log("Vuex Action Response is: ", response.data.allSuppliers)
         dispatch("registerSuppliersAsTags", response.data.allSuppliers)
+    },
+    async createSupplier({ commit, dispatch }, payload) {
+        console.log("payload ", payload)
+        const response = await apolloClient.mutate({
+            mutation: CREATE_SUPPLIER_MUTATION,
+            variables: payload
+        })
+        console.log("Vuex createSupplier Response is: ", response)
+        
     },
     
     captureNewSupplier: ({ dispatch }, payload) => {

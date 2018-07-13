@@ -52,18 +52,23 @@ export default {
 
     submit() {
       if (this.$refs.form.validate()) {
-        this.$apollo.mutate({
-          mutation: CREATE_SUPPLIER_MUTATION,
-          variables: {
-            name,
-            nickName,
-            email
-          }
-        })
+        const {name,nickname,email} = this.$data;
+        const variables = {name,nickname,email}
+
+        this.$store.dispatch("createSupplier", variables)
+        // const {name,nickname,email} = this.$data;
+        // this.$apollo.mutate({
+        //   mutation: CREATE_SUPPLIER_MUTATION,
+        //   variables: {
+        //     name,
+        //     nickname,
+        //     email
+        //   }
+        // })
         // this.$store.dispatch("captureNewSupplier", {
         //   name: this.name,
         //   email: this.email,
-        //   nickname: this.nickName
+        //   nickname: this.nickname
         // });
         // //this.$store.dispatch('triggerTest', true)
       }
