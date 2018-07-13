@@ -24,6 +24,8 @@ nlp.plugin({
 });
 
 const state = {
+    words: {},
+
     missingSupplier: false,
     potentialSupplier: null,
     rawLog: null,
@@ -73,6 +75,13 @@ const getters = {
 };
 
 const mutations = {
+    newTags: (state, payload) => {
+        state.words = Object.assign(state.words, payload)
+        console.log("nlp words: ", state.words)
+    },
+
+
+
     rawlogDebug: (state, payload) => {
         state.rawlogDebug = payload;
         console.log("rawlogDebug", state.rawlogDebug.world());

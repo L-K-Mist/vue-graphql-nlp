@@ -27,8 +27,9 @@ import { ALL_SUPPLIERS_QUERY } from "@/constants/graphql"
 
 export default {
   mounted() {
-    this.$store.dispatch("fetchAllSuppliers");
+    this.$store.dispatch("getSuppliers");
   },
+
   // computed: {
   //   suppliers() {
   //     return this.$store.getters.suppliers;
