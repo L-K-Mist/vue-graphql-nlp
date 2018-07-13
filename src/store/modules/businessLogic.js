@@ -1,4 +1,5 @@
 // import crud from '@/api/pouchDB'
+import  apolloClient from "@/apolloClient"
 
 const state = {
     testRemoteDispatch: false,
