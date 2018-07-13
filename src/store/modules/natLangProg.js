@@ -80,8 +80,6 @@ const mutations = {
         console.log("nlp words: ", state.words)
     },
 
-
-
     rawlogDebug: (state, payload) => {
         state.rawlogDebug = payload;
         console.log("rawlogDebug", state.rawlogDebug.world());
