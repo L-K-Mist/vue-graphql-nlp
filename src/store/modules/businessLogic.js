@@ -49,15 +49,14 @@ const actions = {
             mutation: CREATE_SUPPLIER_MUTATION,
             variables: payload
         })
-        console.log("Vuex createSupplier Response is: ", response)
-        
+        console.log("Vuex createSupplier Response is: ", response.data.createSupplier)   
     },
     
     captureNewSupplier: ({ dispatch }, payload) => {
         payload._id = "supplier_" + payload.name
         // crud.create(payload)
         // crud.info()
-        dispatch('fetchAllSuppliers')
+        dispatch('getSuppliers')
     },
     registerSuppliersAsTags: ({ commit }, payload) => {
         let supWords = {}
