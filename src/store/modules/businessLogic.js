@@ -4,13 +4,11 @@ import { ALL_SUPPLIERS_QUERY } from "@/constants/graphql"
 import { CREATE_SUPPLIER_MUTATION } from "@/constants/graphql"
 import { forEach } from "async";
 
-
 const state = {
-    suppliers: [{}],
+    suppliers: [],
 };
 
 const getters = {
-    
     allSuppliers(state) {
         return state.suppliers
     }
@@ -23,8 +21,7 @@ const mutations = {
     addSupplier(state, payload) {
         
         state.suppliers.push(payload)
-        console.log("after addSupplier suppliers is:", state.suppliers)
-    }
+            }
 };
 
 const actions = {
@@ -34,20 +31,17 @@ const actions = {
             query: ALL_SUPPLIERS_QUERY
         })
         commit("allSuppliers", response.data.allSuppliers);
-        console.log("Vuex Action Response is: ", response.data.allSuppliers)
-        dispatch("registerSuppliersAsTags", response.data.allSuppliers)
+                dispatch("registerSuppliersAsTags", response.data.allSuppliers)
     },
 
     async createSupplier({ commit, dispatch }, payload) {
         var mutable = payload
-        console.log("create Supplier payload ", payload)
-        commit("addSupplier", mutable) // Optimistic Update of state before db  
+                commit("addSupplier", mutable) // Optimistic Update of state before db  
         const response = await apolloClient.mutate({
             mutation: CREATE_SUPPLIER_MUTATION,
             variables: payload
         })
-        console.log("Vuex createSupplier Response is: ", response.data.createSupplier)
- 
+         
         const update = await dispatch('getSuppliers')
     },
     
@@ -64,8 +58,7 @@ const actions = {
             })
         }
         commit("newTags", supWords)
-        console.log("supWords", supWords)
-    },
+            },
 };
 
 export default {

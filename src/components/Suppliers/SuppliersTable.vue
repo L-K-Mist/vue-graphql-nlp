@@ -16,7 +16,6 @@
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
-  
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
@@ -32,7 +31,6 @@
                 </v-layout>
               </v-container>
             </v-card-text>
-  
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
@@ -123,21 +121,15 @@ export default {
 
   methods: {
     async initialize () {
-      this.suppliers = [  // becomes result of gql query
-        {
-          name: 'Checkers Bluff',
-          email: "check@ers.com",
-          nickname: "Checkers",
-        },
-        {
-          name: 'Bluff Hardware',
-          email: "hard@ware.com",
-          nickname: "Usual Guys",
-        },
-       
-      ]
-      let result = await this.$store.dispatch("getSuppliers")
-      console.log("result")
+      let result = await this.$store.dispatch("getSuppliers").then(() => { // Experimental combination of async-await and traditional .then promise  see: https://kendaleiv.com/using-javascript-promises-and-async-await-together/
+        this.suppliers = this.$store.getters.allSuppliers
+        console.log('​--------------------------------------------------');
+        console.log('​asyncinitialize -> this.suppliers', this.suppliers);
+        console.log('​--------------------------------------------------');
+
+});
+
+
     },
 
     editItem (item) {
@@ -168,7 +160,6 @@ export default {
       this.close()
     }
   }
-  
 }
 
 
