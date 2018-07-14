@@ -56,21 +56,6 @@ export default {
         const variables = {name,nickname,email}
 
         this.$store.dispatch("createSupplier", variables)
-        // const {name,nickname,email} = this.$data;
-        // this.$apollo.mutate({
-        //   mutation: CREATE_SUPPLIER_MUTATION,
-        //   variables: {
-        //     name,
-        //     nickname,
-        //     email
-        //   }
-        // })
-        // this.$store.dispatch("captureNewSupplier", {
-        //   name: this.name,
-        //   email: this.email,
-        //   nickname: this.nickname
-        // });
-        // //this.$store.dispatch('triggerTest', true)
       }
     }
   }
