@@ -123,13 +123,11 @@ export default {
     async initialize () {
       let result = await this.$store.dispatch("getSuppliers").then(() => { // Experimental combination of async-await and traditional .then promise  see: https://kendaleiv.com/using-javascript-promises-and-async-await-together/
         this.suppliers = this.$store.getters.allSuppliers
-        console.log('​--------------------------------------------------');
-        console.log('​asyncinitialize -> this.suppliers', this.suppliers);
-        console.log('​--------------------------------------------------');
+        // console.log('​--------------------------------------------------');
+        // console.log('​asyncinitialize -> this.suppliers', this.suppliers);
+        // console.log('​--------------------------------------------------');
 
 });
-
-
     },
 
     editItem (item) {
@@ -152,11 +150,16 @@ export default {
     },
 
     save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.suppliers[this.editedIndex], this.editedItem)
+      if (this.editedIndex > -1) { //if we are editing existing items instead of adding the first item
+        Object.assign(this.suppliers[this.editedIndex], this.editedItem) //overwrite this.suppliers with new data
+        this.$store.dispatch("updateSupplier", this.editedItem) // populate changes to db
       } else {
         this.suppliers.push(this.editedItem)
+        this.$store.dispatch("createSupplier", this.editedItem)
       }
+        // console.log('​-----------------------------------------');
+        // console.log('​save -> this.editedItem', this.editedItem);
+        // console.log('​-----------------------------------------');
       this.close()
     }
   }

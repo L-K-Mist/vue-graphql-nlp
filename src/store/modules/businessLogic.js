@@ -3,6 +3,7 @@ import  apolloClient from "@/apolloClient"
 import { ALL_SUPPLIERS_QUERY } from "@/constants/graphql"
 import { CREATE_SUPPLIER_MUTATION } from "@/constants/graphql"
 import { forEach } from "async";
+import { UPDATE_SUPPLIER_MUTATION } from "../../constants/graphql";
 
 const state = {
     suppliers: [],
@@ -16,12 +17,19 @@ const getters = {
 
 const mutations = {
     allSuppliers(state, payload) {
-        state.suppliers = payload        
+        let mutable = JSON.parse(JSON.stringify(payload))
+
+        state.suppliers = mutable        
     },
     addSupplier(state, payload) {
-        
-        state.suppliers.push(payload)
-            }
+        let mutable = JSON.parse(JSON.stringify(payload))
+        state.suppliers.push(mutable)
+    },
+    //MIGHT NOT NEED THIS
+    // updateSupplier(state, payload) {
+    //     let mutable = 
+    // }
+
 };
 
 const actions = {
@@ -35,14 +43,29 @@ const actions = {
     },
 
     async createSupplier({ commit, dispatch }, payload) {
-        var mutable = payload
-                commit("addSupplier", mutable) // Optimistic Update of state before db  
+        var { name, email, password } = payload
+        commit("addSupplier", payload) // Optimistic Update of state before db  
         const response = await apolloClient.mutate({
             mutation: CREATE_SUPPLIER_MUTATION,
-            variables: payload
+            variables: {
+                name,
+                email,
+                password,
+            }
         })
          
         const update = await dispatch('getSuppliers')
+    },
+
+    async updateSupplier({ commit, dispatch }, payload) {
+        const response = await apolloClient.mutate({
+            mutation: UPDATE_SUPPLIER_MUTATION,
+            variables: payload
+        }).then((response) => {
+        console.log('​------------------------------------------');
+        console.log('​asyncupdateSupplier -> response', response);
+        console.log('​------------------------------------------');
+        })
     },
     
     registerSuppliersAsTags: ({ commit }, payload) => {
