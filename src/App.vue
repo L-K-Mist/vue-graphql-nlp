@@ -20,6 +20,7 @@
                       <v-card-title>If you want to play directly with the graphCool GraphQL database click &nbsp;<a href="https://api.graph.cool/simple/v1/cjjg0n07x5q1n0139fkwu9lrp" target="blank"> this link</a></v-card-title>
                     </v-card>
                     <suppliers-table></suppliers-table>
+                    <log-input></log-input>
                     <router-view></router-view>
                     </v-flex>
                     <v-flex>
@@ -56,7 +57,8 @@ export default {
   },
   name: "app",
   components: {
-    SuppliersTable
+    SuppliersTable,
+    LogInput
 
   }
 };

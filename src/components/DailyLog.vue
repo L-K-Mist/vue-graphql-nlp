@@ -62,7 +62,7 @@
           </v-container>
         </v-flex>
     </v-layout> 
-    <missing-supplier></missing-supplier>
+    
   </v-container>
 
 </main>
@@ -70,8 +70,8 @@
 <script>
 import LogInput from "@/components/DailyLog/LogInput";
 import LogOutput from "@/components/DailyLog/LogOutput";
-import FinTable from "@/components/DailyLog/FinTable";
-import MissingSupplier from "@/components/DailyLog/MissingSupplier";
+// import FinTable from "@/components/DailyLog/FinTable";
+// import MissingSupplier from "@/components/DailyLog/MissingSupplier";
 
 export default {
   computed: {
@@ -83,8 +83,8 @@ export default {
   components: {
     LogOutput,
     LogInput,
-    FinTable,
-    MissingSupplier
+    // FinTable,
+   // MissingSupplier
   }
 };
 </script>

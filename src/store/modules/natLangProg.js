@@ -14,13 +14,6 @@ nlp.plugin({
         '(of|worth of|worth)': 'FinItemPhrase',
         'from #Noun': 'MaybeSupplier',
     },
-    words: {
-        'blessing': 'Supplier',
-        'usual guys': 'Supplier',
-        // 'bluff checkers': 'Supplier',
-        // 'china mall': 'Supplier',
-        // 'mike': 'Supplier'
-    }
 });
 
 const state = {
@@ -75,14 +68,12 @@ const getters = {
 };
 
 const mutations = {
-    newTags: (state, payload) => {
+    newTags: (state, payload) => { // These are for optimistic updates between sessions. Sessions start with words from the database.
         state.words = Object.assign(state.words, payload)
-        console.log("nlp words: ", state.words)
     },
 
     rawlogDebug: (state, payload) => {
         state.rawlogDebug = payload;
-        console.log("rawlogDebug", state.rawlogDebug.world());
     },
     missingSupplier: (state, payload) => {
         state.missingSupplier = payload;
@@ -97,13 +88,10 @@ const mutations = {
     finSentences(state, payload) {
         // mutate state
         state.finSentences = payload;
-        //console.log('mutated finSentences to ', state.financialData.sentences)
     },
     gotFin(state, payload) {
         // mutate state
-        console.log("gotFin was: ", state.gotFin);
         state.gotFin = payload;
-        console.log("gotFin is now: ", state.gotFin);
     },
     finItems(state, payload) {
         state.finItems = payload;
@@ -125,7 +113,6 @@ const actions = {
       .sentences()
       .if("#Money");
     commit("finSentences", financialSentences.data());
-    console.log(financialSentences.out("text"));
     dispatch("finSentenceEvaluate", financialSentences);
   },
   finSentenceEvaluate({ commit, dispatch }, payload) {
@@ -162,21 +149,17 @@ const actions = {
       
     }
     commit("finItems", items);
-    // console.log(items);
     commit("gotFin", true);
   },
   missingSupplier({ commit, dispatch }, payload) {
-      console.log(payload); // to show the step of pulling out financial sentences
       let potentialSupplier = nlp(payload)
           .match("#MaybeSupplier")
           .delete("from")
           .out("text");
           commit('potentialSupplier', potentialSupplier)
-      console.log(potentialSupplier);
-      commit('missingSupplier', true)
-  },
-  populateFinSentences({ commit, dispatch}, payload) {
-      console.log(payload)
+          commit('missingSupplier', true)
+        },
+        populateFinSentences({ commit, dispatch}, payload) {
   },
   triggerTest({commit, dispatch}, payload) {
       dispatch("testRemoteDispatch", true)
