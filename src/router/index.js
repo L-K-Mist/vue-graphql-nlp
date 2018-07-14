@@ -1,20 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import CreateLink from '../components/CreateLink'
-import LinkList from '../components/LinkList'
+import SuppliersTable from "@/components/Suppliers/SuppliersTable"
 
 Vue.use(Router)
 
 export default new Router({
   routes: [{
       path: '/',
-      component: LinkList
+      component: SuppliersTable
     },
-    {
-      path: '/create',
-      component: CreateLink
-    }
+    // {
+    //   path: '/create',
+    //   component: CreateLink
+    // }
   ],
   mode: 'history'
 })

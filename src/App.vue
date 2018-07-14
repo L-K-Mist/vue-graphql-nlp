@@ -19,6 +19,7 @@
                     <v-card>
                       <v-card-title>If you want to play directly with the graphCool GraphQL database click &nbsp;<a href="https://api.graph.cool/simple/v1/cjjg0n07x5q1n0139fkwu9lrp" target="blank"> this link</a></v-card-title>
                     </v-card>
+                    <suppliers-table></suppliers-table>
                     <router-view></router-view>
                     </v-flex>
                     <v-flex>
@@ -29,8 +30,7 @@
         </v-layout>
       </v-container>
     </v-content>
-    <create-link  :dialogVisible="myDialogVisible"
-           @close="myDialogClose"></create-link>
+
     <v-footer :fixed="fixed" app>
     <span>&copy; 2017</span>
     </v-footer>
@@ -38,9 +38,10 @@
 </template>
 
 <script>
-
-import CreateLink from "@/components/CreateLink";
+import SuppliersTable from '@/components/Suppliers/SuppliersTable';
+import LogInput from '@/components/DailyLog'
 export default {
+
   data() {
     return {
       myDialogVisible: false,
@@ -51,13 +52,11 @@ export default {
   methods: {
     myDialogClose() {
       this.myDialogVisible = false;
-      // other code
     }
   },
   name: "app",
   components: {
-    // LinkList,
-    CreateLink,
+    SuppliersTable
 
   }
 };
