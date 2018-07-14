@@ -5,7 +5,7 @@ import businessLogic from './modules/businessLogic'
 
 /**Because of the code below I could actually programattically initialize the nlp plugin
  * 
-
+DernOognei9O
  //my object
  var sendData = {
    field1: value1,

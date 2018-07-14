@@ -39,8 +39,6 @@ export const ALL_SUPPLIERS_QUERY = gql `
 export const CREATE_SUPPLIER_MUTATION = gql`
   mutation CreateSupplierMutation($name: String!, $nickname: String!, $email: String!) {
     createSupplier(name: $name, nickname: $nickname,email: $email) {
-      id
-      createdAt
       name
       nickname
       email

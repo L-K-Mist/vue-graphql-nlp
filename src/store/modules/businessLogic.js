@@ -7,13 +7,14 @@ import { forEach } from "async";
 
 const state = {
     testRemoteDispatch: false,
-    suppliers: [],
+    suppliers: [{}],
 };
 
 const getters = {
     testRemoteDispatch(state) {
         return state.testRemoteDispatch;
     },
+    
     allSuppliers(state) {
         return state.suppliers
     }
@@ -26,8 +27,14 @@ const mutations = {
         state.testRemoteDispatch = payload;
         console.log("testRemoteDispatch is now: ", state.testRemoteDispatch);
     },
+
     allSuppliers(state, payload) {
-        state.suppliers = payload
+        state.suppliers = payload        
+    },
+    addSupplier(state, payload) {
+        
+        state.suppliers.push(payload)
+        console.log("after addSupplier suppliers is:", state.suppliers)
     }
 };
 
@@ -36,28 +43,35 @@ const actions = {
     testRemoteDispatch: ({ commit }, payload) => {
         commit("testRemoteDispatch", payload);  
     },
+
     async getSuppliers({ commit, dispatch }) {
         const response = await apolloClient.query({
             query: ALL_SUPPLIERS_QUERY
         })
+        commit("allSuppliers", response.data.allSuppliers);
         console.log("Vuex Action Response is: ", response.data.allSuppliers)
         dispatch("registerSuppliersAsTags", response.data.allSuppliers)
     },
+
     async createSupplier({ commit, dispatch }, payload) {
-        console.log("payload ", payload)
+        var mutable = payload
+        console.log("create Supplier payload ", payload)
+        commit("addSupplier", mutable) // Optimistic Update of state before db  
         const response = await apolloClient.mutate({
             mutation: CREATE_SUPPLIER_MUTATION,
             variables: payload
         })
-        console.log("Vuex createSupplier Response is: ", response.data.createSupplier)   
+        console.log("Vuex createSupplier Response is: ", response.data.createSupplier)
+ 
+        const update = await dispatch('getSuppliers')
     },
     
-    captureNewSupplier: ({ dispatch }, payload) => {
-        payload._id = "supplier_" + payload.name
-        // crud.create(payload)
-        // crud.info()
-        dispatch('getSuppliers')
-    },
+    // captureNewSupplier: ({ dispatch }, payload) => {
+    //     payload._id = "supplier_" + payload.name
+    //     // crud.create(payload)
+    //     // crud.info()
+    // },
+
     registerSuppliersAsTags: ({ commit }, payload) => {
         let supWords = {}
         for (var i = 0, len = payload.length; i < len; i++) {
@@ -73,9 +87,10 @@ const actions = {
         commit("newTags", supWords)
         console.log("supWords", supWords)
     },
-    updateExistingSupplier: ({ commit }, payload) => {
-        //   crud.update(payload)
-    },
+
+    // updateExistingSupplier: ({ commit }, payload) => {
+    //     //   crud.update(payload)
+    // },
 };
 
 export default {
