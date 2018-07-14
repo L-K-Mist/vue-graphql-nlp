@@ -123,9 +123,9 @@ export default {
     async initialize () {
       let result = await this.$store.dispatch("getSuppliers").then(() => { // Experimental combination of async-await and traditional .then promise  see: https://kendaleiv.com/using-javascript-promises-and-async-await-together/
         this.suppliers = this.$store.getters.allSuppliers
-        // console.log('​--------------------------------------------------');
-        // console.log('​asyncinitialize -> this.suppliers', this.suppliers);
-        // console.log('​--------------------------------------------------');
+        // // console.log('​--------------------------------------------------');
+        // // console.log('​asyncinitialize -> this.suppliers', this.suppliers);
+        // // console.log('​--------------------------------------------------');
 
 });
     },
@@ -138,7 +138,13 @@ export default {
 
     deleteItem (item) {
       const index = this.suppliers.indexOf(item)
+      let supToDelete = this.suppliers[index]
+      // console.log('​---------------------------------------');
+      // console.log('​deleteItem -> supToDelete', supToDelete.id);
+      // console.log('​---------------------------------------');
+
       confirm('Are you sure you want to delete this item?') && this.suppliers.splice(index, 1)
+      this.$store.dispatch("deleteSupplier", supToDelete.id)
     },
 
     close () {
@@ -157,9 +163,9 @@ export default {
         this.suppliers.push(this.editedItem)
         this.$store.dispatch("createSupplier", this.editedItem)
       }
-        // console.log('​-----------------------------------------');
-        // console.log('​save -> this.editedItem', this.editedItem);
-        // console.log('​-----------------------------------------');
+        // // console.log('​-----------------------------------------');
+        // // console.log('​save -> this.editedItem', this.editedItem);
+        // // console.log('​-----------------------------------------');
       this.close()
     }
   }

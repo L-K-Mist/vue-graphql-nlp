@@ -59,3 +59,15 @@ export const UPDATE_SUPPLIER_MUTATION = gql`
   }
 `;
 
+
+export const DELETE_SUPPLIER_MUTATION = gql`
+  mutation DeleteSupplierMutation($id: ID!) {
+    deleteSupplier(id: $id) {
+      name
+      nickname
+      email
+      id
+    }
+  }
+`;
+

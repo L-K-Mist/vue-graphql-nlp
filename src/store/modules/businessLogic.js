@@ -3,7 +3,7 @@ import  apolloClient from "@/apolloClient"
 import { ALL_SUPPLIERS_QUERY } from "@/constants/graphql"
 import { CREATE_SUPPLIER_MUTATION } from "@/constants/graphql"
 import { forEach } from "async";
-import { UPDATE_SUPPLIER_MUTATION } from "../../constants/graphql";
+import { UPDATE_SUPPLIER_MUTATION, DELETE_SUPPLIER_MUTATION } from "../../constants/graphql";
 
 const state = {
     suppliers: [],
@@ -68,6 +68,16 @@ const actions = {
         })
     },
     
+    async deleteSupplier({}, id) {
+        const response = await apolloClient.mutate({
+            mutation: DELETE_SUPPLIER_MUTATION,
+            variables: { id }
+        }).then((response) => {
+        console.log('​------------------------------------------');
+        console.log('​asyncdeleteSupplier -> response', response);
+        console.log('​------------------------------------------');
+        })
+    },
     registerSuppliersAsTags: ({ commit }, payload) => {
         let supWords = {}
         for (var i = 0, len = payload.length; i < len; i++) {
