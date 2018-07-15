@@ -21,7 +21,7 @@
                     </v-card>
                     <suppliers-table></suppliers-table>
                     <log-input></log-input>
-                    <router-view></router-view>
+                    <!-- <router-view></router-view> -->
                     </v-flex>
                     <v-flex>
                     </v-flex>

@@ -71,3 +71,44 @@ export const DELETE_SUPPLIER_MUTATION = gql`
   }
 `;
 
+export const ALL_RAWLOGS_QUERY = gql`
+  query AllRawLogsQuery {
+    allRawLogs {
+      dayDescribed
+      text
+      id
+    }
+  }
+`
+
+export const CREATE_RAWLOGS_MUTATION = gql`
+  mutation CreateRawLogMutation($dayDescribed: String, $text: String!) {
+    createRawLog(dayDescribed: $dayDescribed, text: $text) {
+      dayDescribed
+      text
+      id
+    }
+  }
+`;
+
+export const UPDATE_RAWLOGS_MUTATION = gql`
+         mutation UpdateRawLogMutation($dayDescribed: String, $text: String!, $id: ID!) {
+           updateRawLog(dayDescribed: $dayDescribed, text: $text, id: $id) {
+             dayDescribed
+             text
+             id
+           }
+         }
+       `;
+
+export const DELETE_RAWLOGS_MUTATION = gql`
+  mutation DeleteRawLogMutation($id: ID!) {
+    deleteRawLog(id: $id) {
+      dayDescribed
+      text
+      id
+    }
+  }
+`;
+
+

@@ -1,4 +1,6 @@
 import nlp from 'compromise'
+import apolloClient from "@/apolloClient"
+import { CREATE_RAWLOGS_MUTATION } from '../../constants/graphql';
 
 /**
  * let doc = nlp('expresso').debug();
@@ -18,10 +20,11 @@ nlp.plugin({
 
 const state = {
     words: {},
-
     missingSupplier: false,
     potentialSupplier: null,
-    rawLog: null,
+    rawLog: {
+        
+    },
     rawlogDebug: null,
     finItems: [{
         value: false,
@@ -70,6 +73,10 @@ const getters = {
 const mutations = {
     newTags: (state, payload) => { // These are for optimistic updates between sessions. Sessions start with words from the database.
         state.words = Object.assign(state.words, payload)
+        console.log('​-------------------------');
+        console.log('​state.words', state.words);
+        console.log('​-------------------------');
+        
     },
 
     rawlogDebug: (state, payload) => {
@@ -78,9 +85,9 @@ const mutations = {
     missingSupplier: (state, payload) => {
         state.missingSupplier = payload;
     },
-    potentialSupplier: (state, payload) => {
-        state.potentialSupplier = payload;
-    },
+    // potentialSupplier: (state, payload) => { // A future feature: something to use NLP to suggest new supplier name when text doesn't match existing suppliers.
+    //     state.potentialSupplier = payload;
+    // },
     rawLog(state, payload) {
         // mutate state
         state.rawLog = payload;
@@ -103,11 +110,33 @@ const actions = {
   openActivityLog: ({ commit }, payload) => {
     commit("openActivityLog", payload);
   },
-  newRawLog({ commit, dispatch }, payload) {
+  async newRawLog({ commit, dispatch }, payload) {
     commit("rawLog", payload);
-    commit("rawlogDebug", nlp(payload).debug())
-    dispatch("finSentences", payload);
+    console.log('​-----------------------------------');
+    console.log('​asyncnewRawLog -> payload', payload.dayDescribed);
+    console.log('​-----------------------------------');
+    
+    const response = await apolloClient.mutate({
+      mutation: CREATE_RAWLOGS_MUTATION,
+      variables: payload
+    });
+    console.log("​-------------------------------------");
+    console.log("​asyncnewRawLog -> response", response.data);
+    console.log("​-------------------------------------");
   },
+
+  /**
+var myWords={
+  'university of toronto':'Organization',
+  'girble':'CuteThing'
+}
+var r = nlp('he studied girbles at the University-of-Toronto', myWords)
+r.match('#CuteThing').found
+//true
+r.organizations().length
+//1
+   */
+
   finSentences({ commit, dispatch }, payload) {
     var financialSentences = nlp(payload)
       .sentences()
@@ -117,52 +146,6 @@ const actions = {
   },
   finSentenceEvaluate({ commit, dispatch }, payload) {
     // commit('finSentences', )
-    var val;
-    var items = [];
-    for (val of payload.out("array")) {
-      var item = {};
-      item.sentence = val;
-      if (!nlp(item.sentence).has("#Supplier")) {
-        dispatch("missingSupplier", item.sentence);
-      } else {
-        dispatch('populateFinSentences', item.sentence)
-          let numberText = nlp(val)
-          .match("#Money")
-          .out("text")
-          .replace("r", "");
-        item.number = parseInt(numberText, 10);
-        item.provider = nlp(val)
-          .match("#Supplier")
-          .toTitleCase()
-          .out();
-        item.value = false; // something Vuetify Tabular Data needs
-        item.item = nlp(val)
-          .delete("#Supplier")
-          .delete("#Money")
-          .delete("#FinItemPhrase")
-          .delete("#Preposition")
-          .match("#Noun")
-          .toTitleCase()
-          .out();
-      }
-      items.push(item); //TODO rather use state.finItems.push(item) <-- because I want to push to it from different actions
-      
-    }
-    commit("finItems", items);
-    commit("gotFin", true);
-  },
-  missingSupplier({ commit, dispatch }, payload) {
-      let potentialSupplier = nlp(payload)
-          .match("#MaybeSupplier")
-          .delete("from")
-          .out("text");
-          commit('potentialSupplier', potentialSupplier)
-          commit('missingSupplier', true)
-        },
-        populateFinSentences({ commit, dispatch}, payload) {
-  },
-  triggerTest({commit, dispatch}, payload) {
-      dispatch("testRemoteDispatch", true)
   }
 };
 export default {

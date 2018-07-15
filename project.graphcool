@@ -1,5 +1,5 @@
 # project: cjjg0n07x5q1n0139fkwu9lrp
-# version: 4
+# version: 8
 
 type Link @model {
   id: ID! @isUnique
@@ -35,4 +35,13 @@ type Supplier @model {
   name: String! @isUnique
   nickname: String! @isUnique
   email: String! @isUnique
+}
+
+type RawLog @model {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  describesDay: String
+  dayDescribed: String
+  text: String!
 }
