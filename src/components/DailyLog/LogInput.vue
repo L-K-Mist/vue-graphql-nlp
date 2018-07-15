@@ -24,7 +24,7 @@
             prepend-icon="event"
             readonly
           ></v-text-field>
-          <v-date-picker v-model="date" @input="$refs.menu.save(date); date=date"></v-date-picker>
+          <v-date-picker v-model="date" @input="$refs.menu.save(date)"></v-date-picker>
         </v-menu>
       </v-flex>              
             <v-text-field box
@@ -50,30 +50,30 @@ export default {
     //this.$store.dispatch("fetchAllSuppliers");
   },
   data: () => ({
-    date: null,
+    date: "",
     menu: false,
     rawLog:
       "Got shoes for R70 from Mike. Bought R70 worth Cement, Lime, and Soda from usual guys. Got Sugar for R34 from PickNPay. Got Sweet Melon for R45 from Spar. Tonight, after a breakthrough year for America, our economy is growing and creating jobs at the fastest pace since 1999. Got R90.00 worth of Peas from Bluff Checkers"
   }),
   methods: {
     submit() {
-      if(this.date !== null) {
-        this.$store.dispatch("newRawLog", {
-          text: this.rawLog,
-          dayDescribed: toString(this.date)
-        });
-        console.log('​-------------------------------------');
-          console.log('​submit -> dayDescribed', dayDescribed);
-          console.log('​-------------------------------------');
+      let raw = {
+        text: this.rawLog,
+        dayDescribed: this.date
+      };
+      if (this.date !== "") {
+        this.$store.dispatch("newRawLog", raw);
+        console.log("​-------------------------------------");
+        console.log("​submit -> dayDescribed", raw.dayDescribed);
+        console.log("​-------------------------------------");
       }
     }
   },
   watch: {
     date(newVal) {
-    console.log('​-----------------------');
-    console.log('​date -> newVal', newVal);
-    console.log('​-----------------------');
-      
+      console.log("​-----------------------");
+      console.log("​date -> newVal", newVal);
+      console.log("​-----------------------");
     }
   }
 };
