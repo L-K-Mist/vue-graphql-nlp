@@ -7,7 +7,9 @@
             <v-layout row wrap justify-center>
               <v-flex xs12 md8  
               >
-                <v-card v-if="!gotFin">
+             <v-slide-x-transition>
+
+                <v-card v-if="showIntro">
                   <v-card-title class="headline primary--text">Introduction</v-card-title>
                     <v-container fill-height>
                       <v-layout fill-height>
@@ -28,12 +30,13 @@
                       </v-layout>
                     </v-container>
                 </v-card>
+             </v-slide-x-transition>
               </v-flex>
               <v-flex xs12 md8>
                 <log-input></log-input>
               </v-flex>
               <v-flex xs12 md8>
-                <v-card v-if="gotFin">
+                <v-card>
                   <v-card-title class="headline primary--text">Data Output</v-card-title>
                     <v-container fill-height>
                       <v-layout fill-height>
@@ -41,17 +44,18 @@
                           <template >
                             <v-flex>
                               <p>
-                                First we pull out those sentences that mention money (eg. R90) And attempt to make the distinction between money coming in, and money going out.
+                                First we pull out those sentences that mention money (eg. R90) And attempt to make the distinction between money coming in, and money going out. NLP-Compromise makes this easy.
+                                <strong>Update: For now since my use-case of daily logs only records money going out</strong>
                               </p>
                             </v-flex>          
                             <log-output></log-output>
                             <v-flex>
                               <br>
                               <p>
-                                Then we turn it into a Data-table.
+                                Then we make sure that all these sentences contain a known Supplier from the Suppliers Table. 
                               </p>
                             </v-flex>
-                            <fin-table></fin-table>
+                            <!-- <fin-table></fin-table> -->
                           </template> 
                         </v-flex>
                       </v-layout>
@@ -74,6 +78,14 @@ import LogOutput from "@/components/DailyLog/LogOutput";
 // import MissingSupplier from "@/components/DailyLog/MissingSupplier";
 
 export default {
+  created() {
+    this.intro();
+  },
+  data() {
+    return {
+      showIntro: false
+    };
+  },
   computed: {
     gotFin() {
       return this.$store.getters.gotFin;
@@ -82,9 +94,17 @@ export default {
 
   components: {
     LogOutput,
-    LogInput,
+    LogInput
     // FinTable,
-   // MissingSupplier
+    // MissingSupplier
+  },
+  methods: {
+    async stall(stallTime = 20) {
+      await new Promise(resolve => setTimeout(resolve, stallTime));
+    },
+    async intro() {
+      await this.stall().then(() => (this.showIntro = true));
+    }
   }
 };
 </script>

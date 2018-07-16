@@ -1,6 +1,8 @@
 import nlp from 'compromise'
 import apolloClient from "@/apolloClient"
-import { CREATE_RAWLOGS_MUTATION } from '../../constants/graphql';
+import {
+  CREATE_RAWLOGS_MUTATION
+} from '../../constants/graphql';
 
 /**
  * let doc = nlp('expresso').debug();
@@ -11,111 +13,91 @@ doc = nlp('another expresso').debug();
  */
 
 nlp.plugin({
-    patterns: {
-        '/R[0-9]+/': 'Money',
-        '(of|worth of|worth)': 'FinItemPhrase',
-        'from #Noun': 'MaybeSupplier',
-    },
+  patterns: {
+    '/R[0-9]+/': 'Money',
+    '(of|worth of|worth)': 'FinItemPhrase',
+    'from #Noun': 'MaybeSupplier',
+  },
 });
 
 const state = {
-    words: {},
-    missingSupplier: false,
-    potentialSupplier: null,
-    rawLog: {
-        
-    },
-    rawlogDebug: null,
-    finItems: [{
-        value: false,
-        sentence: "unknown",
-        number: 0,
-        provider: "unknown",
-        item: "unknown"
-    }],
-    finSentences: [{
-        "text": "Got shoes for R70 from Mike. ",
-        "normal": "got shoes for r70 from mike"
-    }, {
-        "text": "Bought R70 worth Cement, Lime, and Soda from usual guys. ",
-        "normal": "bought r70 worth cement lime and soda from usual guys"
-    }, {
-        "text": " Got R90.00 worth of Peas from Bluff Checkers",
-        "normal": "got r90.00 worth of peas from bluff checkers"
-    }],
-    gotFin: false,
+  words: {},
+  potentialSupplier: null,
+  rawLog: {},
+  finItems: [{
+    value: false,
+    sentence: "unknown",
+    number: 0,
+    provider: "unknown",
+    item: "unknown"
+  }],
+  finSentences: ["Nothing Here Yet"],
+  finSentencesNot: ["Nothing Here Yet"],
+  gotFin: false,
 };
 
 const getters = {
-    rawlogDebug: state => {
-        return state.rawlogDebug;
-    },
-    missingSupplier: state => {
-        return state.missingSupplier;
-    },
-    potentialSupplier: state => {
-        return state.potentialSupplier;
-    },
-    rawLog(state) {
-        return state.rawLog;
-    },
-    finSentences(state) {
-        return state.finSentences;
-    },
-    gotFin(state) {
-        return state.gotFin;
-    },
-    finItems(state) {
-        return state.finItems;
-    }
+  potentialSupplier: state => {
+    return state.potentialSupplier;
+  },
+  rawLog(state) {
+    return state.rawLog;
+  },
+  finSentences(state) {
+    return state.finSentences;
+  },
+  finSentencesNot(state) {
+    return state.finSentencesNot;
+  },
+  gotFin(state) {
+    return state.gotFin;
+  },
+  finItems(state) {
+    return state.finItems;
+  }
 };
 
 const mutations = {
-    newTags: (state, payload) => { // These are for optimistic updates between sessions. Sessions start with words from the database.
-        state.words = Object.assign(state.words, payload)
-        console.log('​-------------------------');
-        console.log('​state.words', state.words);
-        console.log('​-------------------------');
-        
-    },
+  newTags: (state, payload) => { // These are for optimistic updates between sessions. Sessions start with words from the database.
+    state.words = Object.assign(state.words, payload)
+    // console.log('​-------------------------');
+    // console.log('​state.words', state.words);
+    // console.log('​-------------------------');
 
-    rawlogDebug: (state, payload) => {
-        state.rawlogDebug = payload;
-    },
-    missingSupplier: (state, payload) => {
-        state.missingSupplier = payload;
-    },
-    // potentialSupplier: (state, payload) => { // A future feature: something to use NLP to suggest new supplier name when text doesn't match existing suppliers.
-    //     state.potentialSupplier = payload;
-    // },
-    rawLog(state, payload) {
-        // mutate state
-        state.rawLog = payload;
-    },
-    finSentences(state, payload) {
-        // mutate state
-        state.finSentences = payload;
-    },
-    gotFin(state, payload) {
-        // mutate state
-        state.gotFin = payload;
-    },
-    finItems(state, payload) {
-        state.finItems = payload;
-    }
+  },
+  rawLog(state, payload) {
+    // mutate state
+    state.rawLog = payload;
+  },
+  finSentences(state, payload) {
+    // mutate state
+    state.finSentences = payload;
+    console.log('​finSentences -> state.finSentences', state.finSentences);
+  },
+  finSentencesNot(state, payload) {
+    // mutate state
+    state.finSentencesNot = payload;
+  },
+  gotFin(state, payload) {
+    // mutate state
+    state.gotFin = payload;
+  },
+  finItems(state, payload) {
+    state.finItems = payload;
+  }
 };
 
 const actions = {
   // Dialogue actions
-  openActivityLog: ({ commit }, payload) => {
-    commit("openActivityLog", payload);
-  },
-  async newRawLog({ commit, dispatch }, payload) {
+  async newRawLog({
+    commit,
+    dispatch
+  }, payload) {
     commit("rawLog", payload);
-    console.log('​-----------------------------------');
-    console.log('​asyncnewRawLog -> payload', payload.dayDescribed);
-    console.log('​-----------------------------------');
-    
+    // console.log('​-----------------------------------');
+    // console.log('​asyncnewRawLog -> payload', payload.dayDescribed);
+    // console.log('​-----------------------------------');
+
     const response = await apolloClient.mutate({
       mutation: CREATE_RAWLOGS_MUTATION,
       variables: payload
@@ -123,6 +105,92 @@ const actions = {
     console.log("​-------------------------------------");
     console.log("​asyncnewRawLog -> response", response.data);
     console.log("​-------------------------------------");
+    dispatch("analyseText", payload)
+  },
+
+  analyseText({
+    commit,
+    dispatch,
+    state
+  }, payload) {
+    let rawText = payload.text
+    let {
+      words
+    } = state
+
+    let analysedText = nlp(rawText, words)
+    // console.log('​analysedText', analysedText.data());
+    dispatch("finSentences", analysedText)
+
+  },
+  finSentences({
+    commit,
+    dispatch,
+    state
+  }, payload) {
+    var financialSentences = payload
+      .sentences()
+      .if("#Money").data();
+
+    var otherSentences = payload
+      .sentences()
+      .ifNo("#Money").data();
+
+    var financialSentences = pullOutText(financialSentences) // simplifies the array from this form:  [{},{}]  to this:  ["some sentence", "another sentence"]
+    var otherSentences = pullOutText(otherSentences)
+
+    function pullOutText(inputArray) {
+      var array = inputArray
+      var finOnlyText = []
+      for (var i = 0, len = array.length; i < len; i++) {
+        finOnlyText.push(inputArray[i].text)
+      }
+      // console.log('​pullOutText -> finOnlyText', finOnlyText);
+      return finOnlyText
+    }
+
+    // console.log('​financialSentences', financialSentences);
+    // console.log('​otherSentences', otherSentences);
+    commit("finSentences", financialSentences);
+    commit("finSentencesNot", otherSentences)
+    commit("gotFin", true)
+    dispatch("analyseFinSentences", financialSentences)
+    // dispatch("finSentenceEvaluate", financialSentences);
+  },
+  analyseFinSentences({
+    commit,
+    state
+  }, payload) {
+    console.log('​payload', payload);
+    var words = state.words
+    console.log('​words', words);
+    var output = hasKnownSupplier(payload)
+    console.log('​output', output);
+
+    function hasKnownSupplier(inputArray) {
+      var array = inputArray
+      var knownSupplier = []
+      var unknownSupplier = []
+      for (var i = 0, len = array.length; i < len; i++) {
+        if (nlp(array[i]).match('#Supplier').found) {
+          knownSupplier.push(array[i])
+        }
+      }
+      // console.log('​pullOutText -> finOnlyText', finOnlyText);
+      return knownSupplier
+    }
+
+  },
+
+
+
+
+
+
+  openActivityLog: ({
+    commit
+  }, payload) => {
+    commit("openActivityLog", payload);
   },
 
   /**
@@ -137,20 +205,16 @@ r.organizations().length
 //1
    */
 
-  finSentences({ commit, dispatch }, payload) {
-    var financialSentences = nlp(payload)
-      .sentences()
-      .if("#Money");
-    commit("finSentences", financialSentences.data());
-    dispatch("finSentenceEvaluate", financialSentences);
-  },
-  finSentenceEvaluate({ commit, dispatch }, payload) {
+  finSentenceEvaluate({
+    commit,
+    dispatch
+  }, payload) {
     // commit('finSentences', )
   }
 };
 export default {
-    state,
-    mutations,
-    actions,
-    getters
+  state,
+  mutations,
+  actions,
+  getters
 }

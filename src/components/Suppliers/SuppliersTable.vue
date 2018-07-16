@@ -1,6 +1,4 @@
 <template>
-<div id="app">
-  <v-app id="inspire">
     <div>
       <v-toolbar flat color="white">
         <v-toolbar-title>SUPPLIERS</v-toolbar-title>
@@ -70,8 +68,6 @@
         </template>
       </v-data-table>
     </div>
-  </v-app>
-</div>
 </template>
     
 <script>
@@ -80,96 +76,95 @@ export default {
     dialog: false,
     headers: [
       {
-        text: 'Supplier',
-        align: 'center',
+        text: "Supplier",
+        align: "center",
         sortable: true,
-        value: 'name'
+        value: "name"
       },
-      { text: 'Nickname', value: 'nickname' },
-      { text: 'Email', value: 'email' },
+      { text: "Nickname", value: "nickname" },
+      { text: "Email", value: "email" }
     ],
     suppliers: [],
     editedIndex: -1,
     editedItem: {
-      name: '',
-      nickname: 0,
-      email: 0,
+      name: "",
+      nickname: "",
+      email: ""
     },
     defaultItem: {
-      name: '',
-      nickname: 0,
-      email: 0,
+      name: "Formal Name",
+      nickname: "The kind of name that might be spoken in a log",
+      email: "Yip, good ol' email-addy"
     }
-    
   }),
 
   computed: {
-    formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item' 
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
   },
 
   watch: {
-    dialog (val) {
-      val || this.close()
+    dialog(val) {
+      val || this.close();
     }
   },
 
-  created () {
-    this.initialize()
+  created() {
+    this.initialize();
   },
 
   methods: {
-    async initialize () {
-      let result = await this.$store.dispatch("getSuppliers").then(() => { // Experimental combination of async-await and traditional .then promise  see: https://kendaleiv.com/using-javascript-promises-and-async-await-together/
-        this.suppliers = this.$store.getters.allSuppliers
+    async initialize() {
+      let result = await this.$store.dispatch("getSuppliers").then(() => {
+        // Experimental combination of async-await and traditional .then promise  see: https://kendaleiv.com/using-javascript-promises-and-async-await-together/
+        this.suppliers = this.$store.getters.allSuppliers;
         // // console.log('​--------------------------------------------------');
         // // console.log('​asyncinitialize -> this.suppliers', this.suppliers);
         // // console.log('​--------------------------------------------------');
-
-});
+      });
     },
 
-    editItem (item) {
-      this.editedIndex = this.suppliers.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+    editItem(item) {
+      this.editedIndex = this.suppliers.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
-    deleteItem (item) {
-      const index = this.suppliers.indexOf(item)
-      let supToDelete = this.suppliers[index]
+    deleteItem(item) {
+      const index = this.suppliers.indexOf(item);
+      let supToDelete = this.suppliers[index];
       // console.log('​---------------------------------------');
       // console.log('​deleteItem -> supToDelete', supToDelete.id);
       // console.log('​---------------------------------------');
 
-      confirm('Are you sure you want to delete this item?') && this.suppliers.splice(index, 1)
-      this.$store.dispatch("deleteSupplier", supToDelete.id)
+      confirm("Are you sure you want to delete this item?") &&
+        this.suppliers.splice(index, 1);
+      this.$store.dispatch("deleteSupplier", supToDelete.id);
     },
 
-    close () {
-      this.dialog = false
+    close() {
+      this.dialog = false;
       setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      }, 300)
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
     },
 
-    save () {
-      if (this.editedIndex > -1) { //if we are editing existing items instead of adding the first item
-        Object.assign(this.suppliers[this.editedIndex], this.editedItem) //overwrite this.suppliers with new data
-        this.$store.dispatch("updateSupplier", this.editedItem) // populate changes to db
+    save() {
+      if (this.editedIndex > -1) {
+        //if we already have some suppliers
+        Object.assign(this.suppliers[this.editedIndex], this.editedItem); //overwrite this.suppliers with new data
       } else {
-        this.suppliers.push(this.editedItem)
-        this.$store.dispatch("createSupplier", this.editedItem)
+        this.suppliers.push(this.editedItem);
+        this.$store.dispatch("createSupplier", this.editedItem);
       }
-        // // console.log('​-----------------------------------------');
-        // // console.log('​save -> this.editedItem', this.editedItem);
-        // // console.log('​-----------------------------------------');
-      this.close()
+      this.$store.dispatch("updateSupplier", this.editedItem); // populate changes to db
+      // // console.log('​-----------------------------------------');
+      // // console.log('​save -> this.editedItem', this.editedItem);
+      // // console.log('​-----------------------------------------');
+      this.close();
     }
   }
-}
-
-
+};
 </script>

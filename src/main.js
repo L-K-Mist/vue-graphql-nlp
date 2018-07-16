@@ -3,7 +3,7 @@ import '@babel/polyfill'
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import apolloClient from '@/apolloClient'
- 
+
 import App from './App'
 import router from './router'
 import store from "./store/store";
@@ -30,6 +30,14 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
     $loadingKey: 'loading'
+  }
+})
+
+Vue.mixin({
+  methods: {
+    // async stall(stallTime = 3000) {
+    //   await new Promise(resolve => setTimeout(resolve, stallTime));
+    // }
   }
 })
 

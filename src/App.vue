@@ -20,7 +20,7 @@
                       <v-card-title>If you want to play directly with the graphCool GraphQL database click &nbsp;<a href="https://api.graph.cool/simple/v1/cjjg0n07x5q1n0139fkwu9lrp" target="blank"> this link</a></v-card-title>
                     </v-card>
                     <suppliers-table></suppliers-table>
-                    <log-input></log-input>
+                    <daily-log></daily-log>
                     <!-- <router-view></router-view> -->
                     </v-flex>
                     <v-flex>
@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import SuppliersTable from '@/components/Suppliers/SuppliersTable';
-import LogInput from '@/components/DailyLog'
+import SuppliersTable from "@/components/Suppliers/SuppliersTable";
+// import LogInput from '@/components/DailyLog'
+import DailyLog from "@/components/DailyLog";
 export default {
-
   data() {
     return {
       myDialogVisible: false,
@@ -58,8 +58,7 @@ export default {
   name: "app",
   components: {
     SuppliersTable,
-    LogInput
-
+    DailyLog
   }
 };
 </script>
