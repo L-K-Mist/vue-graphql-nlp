@@ -48,11 +48,13 @@ const actions = {
     commit,
     dispatch
   }) {
-    const response = await apolloClient.query({
-      query: ALL_SUPPLIERS_QUERY
-    })
-    commit("allSuppliers", response.data.allSuppliers);
-    dispatch("registerSuppliersAsTags", response.data.allSuppliers)
+    await apolloClient.query({
+        query: ALL_SUPPLIERS_QUERY
+      })
+      .then((response) => {
+        commit("allSuppliers", response.data.allSuppliers)
+        dispatch("registerSuppliersAsTags", response.data.allSuppliers)
+      });
   },
 
   async createSupplier({
@@ -73,7 +75,7 @@ const actions = {
         email,
       }
     })
-    // const update = await dispatch('getSuppliers')
+    await dispatch('getSuppliers')
   },
 
   async updateSupplier({

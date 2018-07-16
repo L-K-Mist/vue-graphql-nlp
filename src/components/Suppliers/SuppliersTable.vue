@@ -92,9 +92,9 @@ export default {
       email: ""
     },
     defaultItem: {
-      name: "Formal Name",
-      nickname: "The kind of name that might be spoken in a log",
-      email: "Yip, good ol' email-addy"
+      name: "",
+      nickname: "",
+      email: ""
     }
   }),
 
