@@ -16,11 +16,15 @@ import {
 
 const state = {
   suppliers: [],
+  showSupplierSentences: false
 };
 
 const getters = {
   allSuppliers(state) {
     return state.suppliers
+  },
+  showSupplierSentences(state) {
+    return state.showSupplierSentences
   }
 };
 
@@ -34,6 +38,9 @@ const mutations = {
     let mutable = JSON.parse(JSON.stringify(payload))
     state.suppliers.push(mutable)
     console.log('​addSupplier -> state.suppliers', state.suppliers);
+  },
+  showSupplierSentences(state, payload) {
+    state.showSupplierSentences = payload
   },
   //MIGHT NOT NEED THIS
   // updateSupplier(state, payload) {

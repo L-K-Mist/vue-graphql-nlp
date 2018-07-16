@@ -55,6 +55,7 @@
                                 Then we make sure that all these sentences contain a known Supplier from the Suppliers Table. 
                               </p>
                             </v-flex>
+                            <supplier-sentences v-if="showSupplierSentences"></supplier-sentences>
                             <!-- <fin-table></fin-table> -->
                           </template> 
                         </v-flex>
@@ -74,6 +75,7 @@
 <script>
 import LogInput from "@/components/DailyLog/LogInput";
 import LogOutput from "@/components/DailyLog/LogOutput";
+import SupplierSentences from "@/components/DailyLog/SupplierSentences";
 // import FinTable from "@/components/DailyLog/FinTable";
 // import MissingSupplier from "@/components/DailyLog/MissingSupplier";
 
@@ -89,12 +91,16 @@ export default {
   computed: {
     gotFin() {
       return this.$store.getters.gotFin;
+    },
+    showSupplierSentences() {
+      return this.$store.getters.showSupplierSentences;
     }
   },
 
   components: {
     LogOutput,
-    LogInput
+    LogInput,
+    SupplierSentences
     // FinTable,
     // MissingSupplier
   },

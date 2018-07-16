@@ -84,7 +84,10 @@ const mutations = {
   supplierSentences(state, payload) {
     // mutate state
     state.supplierSentences = payload;
+    state.showSupplierSentences = true
+    console.log('​supplierSentences -> state.showSupplierSentences', state.showSupplierSentences);
     console.log('​supplierSentences -> state.supplierSentences', state.supplierSentences);
+
 
   },
   gotFin(state, payload) {
@@ -166,6 +169,8 @@ const actions = {
   }, payload) {
     var words = state.words
     commit("supplierSentences", knownOrNot(payload))
+    console.log('​knownOrNot(payload)', knownOrNot(payload));
+
 
     function knownOrNot(inputArray) {
       var array = inputArray
