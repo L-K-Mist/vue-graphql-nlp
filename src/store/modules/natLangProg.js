@@ -33,6 +33,10 @@ const state = {
   }],
   finSentences: ["Nothing Here Yet"],
   finSentencesNot: ["Nothing Here Yet"],
+  supplierSentences: {
+    knownSuppliers: ["Nothing Here Yet"],
+    unknownSuppliers: ["Nothing Here Yet"]
+  },
   gotFin: false,
 };
 
@@ -49,6 +53,9 @@ const getters = {
   finSentencesNot(state) {
     return state.finSentencesNot;
   },
+  finSentencesNot(state) {
+    return state.finSentencesNot;
+  },
   gotFin(state) {
     return state.gotFin;
   },
@@ -60,9 +67,6 @@ const getters = {
 const mutations = {
   newTags: (state, payload) => { // These are for optimistic updates between sessions. Sessions start with words from the database.
     state.words = Object.assign(state.words, payload)
-    // console.log('​-------------------------');
-    // console.log('​state.words', state.words);
-    // console.log('​-------------------------');
 
   },
   rawLog(state, payload) {
@@ -72,11 +76,16 @@ const mutations = {
   finSentences(state, payload) {
     // mutate state
     state.finSentences = payload;
-    console.log('​finSentences -> state.finSentences', state.finSentences);
   },
   finSentencesNot(state, payload) {
     // mutate state
     state.finSentencesNot = payload;
+  },
+  supplierSentences(state, payload) {
+    // mutate state
+    state.supplierSentences = payload;
+    console.log('​supplierSentences -> state.supplierSentences', state.supplierSentences);
+
   },
   gotFin(state, payload) {
     // mutate state
@@ -94,9 +103,6 @@ const actions = {
     dispatch
   }, payload) {
     commit("rawLog", payload);
-    // console.log('​-----------------------------------');
-    // console.log('​asyncnewRawLog -> payload', payload.dayDescribed);
-    // console.log('​-----------------------------------');
 
     const response = await apolloClient.mutate({
       mutation: CREATE_RAWLOGS_MUTATION,
@@ -119,10 +125,10 @@ const actions = {
     } = state
 
     let analysedText = nlp(rawText, words)
-    // console.log('​analysedText', analysedText.data());
     dispatch("finSentences", analysedText)
 
   },
+
   finSentences({
     commit,
     dispatch,
@@ -145,12 +151,9 @@ const actions = {
       for (var i = 0, len = array.length; i < len; i++) {
         finOnlyText.push(inputArray[i].text)
       }
-      // console.log('​pullOutText -> finOnlyText', finOnlyText);
       return finOnlyText
     }
 
-    // console.log('​financialSentences', financialSentences);
-    // console.log('​otherSentences', otherSentences);
     commit("finSentences", financialSentences);
     commit("finSentencesNot", otherSentences)
     commit("gotFin", true)
@@ -161,23 +164,24 @@ const actions = {
     commit,
     state
   }, payload) {
-    console.log('​payload', payload);
     var words = state.words
-    console.log('​words', words);
-    var output = hasKnownSupplier(payload)
-    console.log('​output', output);
+    commit("supplierSentences", knownOrNot(payload))
 
-    function hasKnownSupplier(inputArray) {
+    function knownOrNot(inputArray) {
       var array = inputArray
-      var knownSupplier = []
-      var unknownSupplier = []
+      var knownSuppliers = []
+      var unknownSuppliers = []
       for (var i = 0, len = array.length; i < len; i++) {
         if (nlp(array[i]).match('#Supplier').found) {
-          knownSupplier.push(array[i])
+          knownSuppliers.push(array[i])
+        } else {
+          unknownSuppliers.push(array[i])
         }
       }
-      // console.log('​pullOutText -> finOnlyText', finOnlyText);
-      return knownSupplier
+      return {
+        knownSuppliers,
+        unknownSuppliers
+      }
     }
 
   },
