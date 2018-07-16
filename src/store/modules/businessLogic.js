@@ -61,19 +61,19 @@ const actions = {
   }, payload) {
     var {
       name,
+      nickname,
       email,
-      password
     } = payload
-    commit("addSupplier", payload) // Optimistic Update of state before db  
+    // commit("addSupplier", payload) // Optimistic Update of state before db  // Not necessary since component is optimistic already. 
     const response = await apolloClient.mutate({
       mutation: CREATE_SUPPLIER_MUTATION,
       variables: {
         name,
+        nickname,
         email,
-        password,
       }
     })
-    const update = await dispatch('getSuppliers')
+    // const update = await dispatch('getSuppliers')
   },
 
   async updateSupplier({

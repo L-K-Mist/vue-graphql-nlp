@@ -100,7 +100,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Supplier" : "Edit Supplier";
     }
   },
 
@@ -126,6 +126,8 @@ export default {
     },
 
     editItem(item) {
+      console.log("​editItem -> item", item);
+
       this.editedIndex = this.suppliers.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -152,17 +154,18 @@ export default {
     },
 
     save() {
+      // The same function is executed when save button on New Supplier dialog is clicked AND when save button is clicked for editing suppliers in-line
       if (this.editedIndex > -1) {
         //if we already have some suppliers
         Object.assign(this.suppliers[this.editedIndex], this.editedItem); //overwrite this.suppliers with new data
+        this.$store.dispatch("updateSupplier", this.editedItem); // populate changes to db
       } else {
         this.suppliers.push(this.editedItem);
         this.$store.dispatch("createSupplier", this.editedItem);
       }
-      this.$store.dispatch("updateSupplier", this.editedItem); // populate changes to db
-      // // console.log('​-----------------------------------------');
-      // // console.log('​save -> this.editedItem', this.editedItem);
-      // // console.log('​-----------------------------------------');
+      console.log("​-----------------------------------------");
+      console.log("​save -> this.editedItem", this.editedItem);
+      console.log("​-----------------------------------------");
       this.close();
     }
   }
