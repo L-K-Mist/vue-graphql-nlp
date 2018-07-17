@@ -33,6 +33,8 @@ const apolloProvider = new VueApollo({
   }
 })
 
+
+
 Vue.mixin({
   methods: {
     // async stall(stallTime = 3000) {
@@ -41,11 +43,14 @@ Vue.mixin({
   }
 })
 
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   provide: apolloProvider.provide(), // specify the provide object on your root component
   router,
   store,
+
   render: h => h(App)
 })

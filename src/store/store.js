@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import natLangProg from './modules/natLangProg'
 import businessLogic from './modules/businessLogic'
+import viewSwitching from './modules/viewSwitching'
 
 /**Because of the code below I could actually programattically initialize the nlp plugin
  * 
@@ -22,6 +23,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     natLangProg,
-    businessLogic
+    businessLogic,
+    viewSwitching
   }
 })

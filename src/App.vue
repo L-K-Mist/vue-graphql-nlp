@@ -43,6 +43,16 @@ import SuppliersTable from "@/components/Suppliers/SuppliersTable";
 // import LogInput from '@/components/DailyLog'
 import DailyLog from "@/components/DailyLog";
 export default {
+  mounted() {
+    this.$store.watch(
+      state => state.supplierSentences,
+      val => {
+        //A watcher to make showing and hiding certain components easier to code
+        console.log("watching now");
+        this.$store.dispatch("showsupplierSentences", true);
+      }
+    );
+  },
   data() {
     return {
       myDialogVisible: false,

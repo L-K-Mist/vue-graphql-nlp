@@ -61,6 +61,9 @@ const getters = {
   },
   finItems(state) {
     return state.finItems;
+  },
+  supplierSentences(state) {
+    return state.supplierSentences
   }
 };
 
@@ -84,11 +87,7 @@ const mutations = {
   supplierSentences(state, payload) {
     // mutate state
     state.supplierSentences = payload;
-    state.showSupplierSentences = true
-    console.log('​supplierSentences -> state.showSupplierSentences', state.showSupplierSentences);
     console.log('​supplierSentences -> state.supplierSentences', state.supplierSentences);
-
-
   },
   gotFin(state, payload) {
     // mutate state
@@ -117,7 +116,7 @@ const actions = {
     dispatch("analyseText", payload)
   },
 
-  analyseText({
+  analyseText({ // TODO Refactor: consider using a std function here to return the value wanted instead of using up a whole action that only dispatches down the chain
     commit,
     dispatch,
     state
@@ -165,12 +164,14 @@ const actions = {
   },
   analyseFinSentences({
     commit,
-    state
+    state,
+    dispatch
   }, payload) {
     var words = state.words
-    commit("supplierSentences", knownOrNot(payload))
+    let supSentences = knownOrNot(payload)
+    commit("supplierSentences", supSentences)
     console.log('​knownOrNot(payload)', knownOrNot(payload));
-
+    dispatch('showsupplierSentences', true)
 
     function knownOrNot(inputArray) {
       var array = inputArray
@@ -188,38 +189,7 @@ const actions = {
         unknownSuppliers
       }
     }
-
   },
-
-
-
-
-
-
-  openActivityLog: ({
-    commit
-  }, payload) => {
-    commit("openActivityLog", payload);
-  },
-
-  /**
-var myWords={
-  'university of toronto':'Organization',
-  'girble':'CuteThing'
-}
-var r = nlp('he studied girbles at the University-of-Toronto', myWords)
-r.match('#CuteThing').found
-//true
-r.organizations().length
-//1
-   */
-
-  finSentenceEvaluate({
-    commit,
-    dispatch
-  }, payload) {
-    // commit('finSentences', )
-  }
 };
 export default {
   state,

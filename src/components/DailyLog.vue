@@ -8,7 +8,6 @@
               <v-flex xs12 md8  
               >
              <v-slide-x-transition>
-
                 <v-card v-if="showIntro">
                   <v-card-title class="headline primary--text">Introduction</v-card-title>
                     <v-container fill-height>
@@ -41,7 +40,6 @@
                     <v-container fill-height>
                       <v-layout fill-height>
                         <v-flex xs12 align-end flexbox>                    
-                          <template >
                             <v-flex>
                               <p>
                                 First we pull out those sentences that mention money (eg. R90) And attempt to make the distinction between money coming in, and money going out. NLP-Compromise makes this easy.
@@ -49,15 +47,17 @@
                               </p>
                             </v-flex>          
                             <log-output></log-output>
+                            <template v-if="$store.getters.showsupplierSentences">                              
                             <v-flex>
                               <br>
-                              <p>
+                                <p>
                                 Then we make sure that all these sentences contain a known Supplier from the Suppliers Table. 
                               </p>
+
                             </v-flex>
-                            <supplier-sentences v-if="showSupplierSentences"></supplier-sentences>
+                            <supplier-sentences ></supplier-sentences>
                             <!-- <fin-table></fin-table> -->
-                          </template> 
+                            </template>
                         </v-flex>
                       </v-layout>
                     </v-container>
@@ -73,6 +73,7 @@
 </main>
 </template>
 <script>
+// import { mapState } from "vuex";
 import LogInput from "@/components/DailyLog/LogInput";
 import LogOutput from "@/components/DailyLog/LogOutput";
 import SupplierSentences from "@/components/DailyLog/SupplierSentences";
@@ -89,12 +90,24 @@ export default {
     };
   },
   computed: {
+    // ...mapState(["showSupplierSentences"]),
     gotFin() {
       return this.$store.getters.gotFin;
     },
-    showSupplierSentences() {
-      return this.$store.getters.showSupplierSentences;
+    showP() {
+      console.log("showP", this.$store.state.rawLog);
+      return this.$store.state.showsupplierSentences;
     }
+    // showSupplierSentences() {
+    //   get: () => {
+    //     return this.$store.getters.showSupplierSentences;
+    //   };
+    //   set: setVal => {
+    //     console.log(
+    //       "dailyLog wants to set showSupplierSentences with: ",
+    //       setVal
+    //     );
+    //   };
   },
 
   components: {
