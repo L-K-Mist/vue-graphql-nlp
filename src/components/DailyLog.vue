@@ -12,7 +12,7 @@
                   <v-card-title class="headline primary--text">Introduction</v-card-title>
                     <v-container fill-height>
                       <v-layout fill-height>
-                        <v-flex xs12 align-end flexbox>
+                        <v-flex xs12 class="text-xs-left" align-end flexbox>
                           <p>
                             This is a little app I'm working on to take my daily activity logs captured on pen and paper; and turn them into useable data. 
                           </p>

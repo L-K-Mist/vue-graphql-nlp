@@ -1,9 +1,6 @@
 <template>
     <v-layout row wrap>
         <template  v-if="$store.getters.showsupplierSentences">
-        <v-flex>
-
-        </v-flex>
         <v-card class="text-xs-left">
             <v-card-title primary-title>
                 Supplier Sentences
@@ -13,7 +10,7 @@
                 <template v-for="(item, index) in supplierSentences.knownSuppliers">
                     <v-list-tile :key="index" avatar>
                         <v-list-tile-avatar>
-                            <!-- <emoji  emoji="smile" :size="40"></emoji> -->
+                           <emoji  emoji="money_with_wings" :size="40"></emoji>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title v-html="item"></v-list-tile-title>
@@ -27,7 +24,7 @@
                 <template v-for="(item, index) in supplierSentences.unknownSuppliers">
                     <v-list-tile :key="index" avatar>
                         <v-list-tile-avatar>
-                            <!-- <emoji  emoji="frown" :size="40"></emoji> -->
+                            <emoji  emoji="money_with_wings" :size="40"></emoji>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title v-html="item"></v-list-tile-title>
@@ -57,14 +54,6 @@ export default {
     };
   },
   computed: {
-    showSupplierSentences: {
-      get() {
-        return this.$store.state.showsupplierSentences;
-      },
-      set(setBool) {
-        return setBool;
-      }
-    },
     knownSuppliers() {
       return this.$store.getters.supplierSentences.knownSuppliers; // The trick to avoid getting undefined errors is to use v-if on the component to only render this when the values are known
     },
