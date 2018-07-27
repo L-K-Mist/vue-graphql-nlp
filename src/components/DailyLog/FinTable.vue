@@ -17,22 +17,21 @@
  * Going to need this prop method for nested v-for http://patrickwho.me/vue-js-nested-list-rendering/
  */
 export default {
-    // to switch off touchpad:  xinput --disable 12
-
-    data () {
-        return {
-        headers: [
-            {
-            text: 'Suppliers',
-            align: 'left',
-            sortable: true,
-            value: 'name'
-            },
-            { text: 'Items Bought', value: 'item', align: 'left'},
-            { text: 'Value', value: 'number' , align: 'left'}
-        ]
-      }
-    },
+  // to switch off touchpad:  xinput --disable 12
+  data() {
+    return {
+      headers: [
+        {
+          text: "Suppliers",
+          align: "left",
+          sortable: true,
+          value: "name"
+        },
+        { text: "Items Bought", value: "item", align: "left" },
+        { text: "Value", value: "number", align: "left" }
+      ]
+    };
+  },
 
   computed: {
     items() {
