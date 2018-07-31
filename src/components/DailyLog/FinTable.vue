@@ -7,8 +7,8 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.provider }}</td>
-        <td class="text-xs-left">{{ props.item.item }}</td>
-        <td class="text-xs-left">{{ "R " + props.item.number }}</td>
+        <td class="text-xs-left">{{ props.item.itemsBought }}</td>
+        <td class="text-xs-left">{{ "R " + props.item.amount }}</td>
       </template>
     </v-data-table>
 </template>

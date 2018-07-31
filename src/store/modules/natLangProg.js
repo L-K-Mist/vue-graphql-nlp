@@ -27,7 +27,7 @@ const state = {
   finItems: [{
     value: false,
     sentence: "unknown",
-    number: 0,
+    amount: 0,
     provider: "unknown",
     item: "unknown"
   }],
@@ -87,7 +87,7 @@ const mutations = {
   supplierSentences(state, payload) {
     // mutate state
     state.supplierSentences = payload;
-    console.log('​supplierSentences -> state.supplierSentences', state.supplierSentences);
+    // // // console.log('​supplierSentences -> state.supplierSentences', state.supplierSentences);
   },
   gotFin(state, payload) {
     // mutate state
@@ -155,7 +155,6 @@ const actions = {
       }
       return finOnlyText
     }
-
     commit("finSentences", financialSentences);
     commit("finSentencesNot", otherSentences)
     commit("gotFin", true)
@@ -170,9 +169,11 @@ const actions = {
     var words = state.words
     let supSentences = knownOrNot(payload)
     commit("supplierSentences", supSentences)
-    console.log('​knownOrNot(payload)', knownOrNot(payload));
+    // // // console.log('​knownOrNot(payload)', knownOrNot(payload));
     dispatch('showsupplierSentences', true)
+    dispatch('populateSpending', supSentences.knownSuppliers)
 
+    // Function used above
     function knownOrNot(inputArray) {
       var array = inputArray
       var knownSuppliers = []
@@ -190,7 +191,41 @@ const actions = {
       }
     }
   },
+  populateSpending({
+    commit,
+    state
+  }, payload) {
+    var array = payload
+    var finItems = []
+    for (let i = 0, len = array.length; i < len; i++) {
+      let arrayItem = array[i]
+      // // // console.log('​nouns', nouns);
+      let tableRow = {}
+      tableRow.value = false // Not directly connected to Business Logic but required by vuetify data table
+      var purchaseAsText = nlp(arrayItem).match('#Money').out('text')
+      // console.log('​purchaseAsText', purchaseAsText);
+      var ridR = nlp(arrayItem).replace("R", "").out('text')
+      // console.log('​ridR', ridR);
+
+      var currencyValue =
+
+        console.log(currencyValue)
+
+      tableRow.amount = parseFloat(purchaseAsText.replace(/[^\d\.]/g, '')).toFixed(2);
+
+      // // // console.log('​amount', amount);
+      tableRow.provider = nlp(arrayItem).match('#Supplier').out('text')
+      // // // console.log('​supplier', supplier);
+      var strip = nlp(arrayItem).delete('#Money').delete('from #Noun+').delete('#Supplier').out('text')
+      // // console.log('​strip', strip);
+      tableRow.itemsBought = nlp(strip).match('#Noun').delete('worth').out('text')
+      // // console.log('​itemsBought', itemsBought);
+      finItems.push(tableRow)
+    }
+    commit('finItems', finItems)
+  }
 };
+
 export default {
   state,
   mutations,
