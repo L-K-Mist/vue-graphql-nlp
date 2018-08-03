@@ -211,7 +211,7 @@ const actions = {
 
         console.log(currencyValue)
 
-      tableRow.amount = parseFloat(purchaseAsText.replace(/[^\d\.]/g, '')).toFixed(2);
+      tableRow.amount = parseFloat(purchaseAsText.replace(/[^\d\.]/g, '')).toFixed(2); // Convert text currency into a number with two decimals
 
       // // // console.log('​amount', amount);
       tableRow.provider = nlp(arrayItem).match('#Supplier').out('text')

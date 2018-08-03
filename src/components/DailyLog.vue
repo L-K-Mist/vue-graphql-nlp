@@ -55,6 +55,12 @@
                               </p>
                             </v-flex>
                             <supplier-sentences ></supplier-sentences>
+                            <v-flex>
+                              <br>
+                                <p>
+                                Then with some fancy nlp footwork we populate the table with the transactions that were captured.
+                              </p>
+                            </v-flex>
                             <fin-table></fin-table>
                             </template>
                         </v-flex>

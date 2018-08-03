@@ -18,7 +18,7 @@
                     </v-list-tile>
                 </template>
             </v-list>
-            <v-list two-line>
+            <v-list v-if="unknownSuppliers.length > 0" two-line>
               <v-flex class="ml-2">
                 <h3>These Suppliers Are Strange to Me</h3>
                 <p>Are you sure that this is captured correctly? If so, please update the Supplier Table.</p>
